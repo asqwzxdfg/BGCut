@@ -239,6 +239,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [user]);
 
+  // 특정 계정에 Pro 권한 부여 (개발/테스트용)
+  // 이름이 "산들"인 계정에 Pro 권한 자동 부여
+  useEffect(() => {
+    const users = getStoredUsers();
+    let updated = false;
+    
+    users.forEach((u, index) => {
+      if (u.name === '산들' && u.plan !== 'pro') {
+        users[index].plan = 'pro';
+        updated = true;
+      }
+    });
+    
+    if (updated) {
+      saveUsers(users);
+      // 현재 로그인한 사용자가 산들이면 상태 업데이트
+      if (user && user.name === '산들' && user.plan !== 'pro') {
+        setUser({ ...user, plan: 'pro' });
+      }
+    }
+  }, [user]);
+
   // 서비스 사용 가능 여부
   const canUseService = useCallback(() => {
     if (!user) return false;

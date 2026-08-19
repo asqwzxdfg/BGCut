@@ -1,4 +1,5 @@
 import { useRef, useMemo } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import type { ProcessingResult, BackgroundOption } from '../../types';
 import styles from './ResultSection.module.css';
 
@@ -27,9 +28,9 @@ export default function ResultSection({
   onCompare,
   backgroundOption = { type: 'transparent' },
 }: ResultSectionProps) {
+  const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 배경 스타일 계산
   const backgroundStyle = useMemo(() => {
     if (backgroundOption.type === 'color' && backgroundOption.color) {
       return { backgroundColor: backgroundOption.color };
@@ -64,7 +65,7 @@ export default function ResultSection({
     <section className={styles.section}>
       <div className={styles.header}>
         <div className={styles.titleGroup}>
-          <h2 className={styles.title}>변환 결과물</h2>
+          <h2 className={styles.title}>{t.results.title}</h2>
           <span className={styles.count}>{results.length}</span>
         </div>
 
@@ -78,11 +79,11 @@ export default function ResultSection({
             className={styles.hiddenInput}
           />
           <button className={styles.addButton} onClick={handleAddClick}>
-            + 이미지 추가
+            {t.results.addMore}
           </button>
           {results.length >= 2 && (
             <button className={styles.downloadAllButton} onClick={onDownloadAll}>
-              전체 다운로드 (ZIP)
+              {t.results.downloadAll}
             </button>
           )}
         </div>
@@ -116,18 +117,18 @@ export default function ResultSection({
                 className={styles.compareButton}
                 onClick={() => onCompare(result)}
               >
-                원본 보기
+                {t.results.viewOriginal}
               </button>
               <button
                 className={styles.downloadButton}
                 onClick={() => onDownload(result)}
               >
-                다운로드
+                {t.results.download}
               </button>
               <button
                 className={styles.deleteButton}
                 onClick={() => onDelete(result.id)}
-                aria-label="삭제"
+                aria-label="Delete"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18" />

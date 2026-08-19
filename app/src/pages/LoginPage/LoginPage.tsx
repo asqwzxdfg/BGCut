@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import styles from './LoginPage.module.css';
 
 type Mode = 'login' | 'register';
@@ -8,6 +9,7 @@ type Mode = 'login' | 'register';
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login, register, error, clearError, isLoading, user } = useAuth();
+  const { t } = useLanguage();
   
   const [mode, setMode] = useState<Mode>('login');
   const [email, setEmail] = useState('');
@@ -16,14 +18,12 @@ export default function LoginPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [localError, setLocalError] = useState('');
 
-  // 이미 로그인되어 있으면 홈으로
   useEffect(() => {
     if (user) {
       navigate('/');
     }
   }, [user, navigate]);
 
-  // 모드 전환 시 에러 클리어
   useEffect(() => {
     clearError();
     setLocalError('');
@@ -35,7 +35,7 @@ export default function LoginPage() {
 
     if (mode === 'register') {
       if (password !== confirmPassword) {
-        setLocalError('비밀번호가 일치하지 않습니다.');
+        setLocalError(t.errors.passwordMismatch);
         return;
       }
 
@@ -49,7 +49,7 @@ export default function LoginPage() {
         navigate('/');
       }
     }
-  }, [mode, email, password, name, confirmPassword, login, register, navigate]);
+  }, [mode, email, password, name, confirmPassword, login, register, navigate, t]);
 
   const toggleMode = () => {
     setMode(mode === 'login' ? 'register' : 'login');
@@ -75,13 +75,13 @@ export default function LoginPage() {
               className={`${styles.tab} ${mode === 'login' ? styles.tabActive : ''}`}
               onClick={() => setMode('login')}
             >
-              로그인
+              {t.login.title}
             </button>
             <button
               className={`${styles.tab} ${mode === 'register' ? styles.tabActive : ''}`}
               onClick={() => setMode('register')}
             >
-              회원가입
+              {t.login.register}
             </button>
             <div 
               className={styles.tabIndicator} 
@@ -90,17 +90,17 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={`${styles.formContent} ${mode === 'register' ? styles.registerMode : ''}`}>
+            <div className={styles.formContent}>
               {mode === 'register' && (
                 <div className={styles.field}>
-                  <label htmlFor="name" className={styles.label}>이름</label>
+                  <label htmlFor="name" className={styles.label}>{t.login.name}</label>
                   <input
                     id="name"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className={styles.input}
-                    placeholder="홍길동"
+                    placeholder={t.login.namePlaceholder}
                     autoComplete="name"
                     required
                   />
@@ -108,28 +108,28 @@ export default function LoginPage() {
               )}
 
               <div className={styles.field}>
-                <label htmlFor="email" className={styles.label}>이메일</label>
+                <label htmlFor="email" className={styles.label}>{t.login.email}</label>
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={styles.input}
-                  placeholder="hello@example.com"
+                  placeholder={t.login.emailPlaceholder}
                   autoComplete="email"
                   required
                 />
               </div>
 
               <div className={styles.field}>
-                <label htmlFor="password" className={styles.label}>비밀번호</label>
+                <label htmlFor="password" className={styles.label}>{t.login.password}</label>
                 <input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className={styles.input}
-                  placeholder="8자 이상, 영문+숫자"
+                  placeholder={t.login.passwordPlaceholder}
                   autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                   required
                 />
@@ -137,14 +137,14 @@ export default function LoginPage() {
 
               {mode === 'register' && (
                 <div className={styles.field}>
-                  <label htmlFor="confirmPassword" className={styles.label}>비밀번호 확인</label>
+                  <label htmlFor="confirmPassword" className={styles.label}>{t.login.confirmPassword}</label>
                   <input
                     id="confirmPassword"
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className={styles.input}
-                    placeholder="비밀번호를 다시 입력하세요"
+                    placeholder={t.login.confirmPlaceholder}
                     autoComplete="new-password"
                     required
                   />
@@ -162,15 +162,11 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <button 
-                type="submit" 
-                className={styles.submitButton}
-                disabled={isLoading}
-              >
+              <button type="submit" className={styles.submitButton} disabled={isLoading}>
                 {isLoading ? (
                   <span className={styles.spinner} />
                 ) : (
-                  mode === 'login' ? '로그인' : '가입하기'
+                  mode === 'login' ? t.login.loginButton : t.login.registerButton
                 )}
               </button>
             </div>
@@ -179,25 +175,23 @@ export default function LoginPage() {
           <p className={styles.switchText}>
             {mode === 'login' ? (
               <>
-                아직 계정이 없으신가요?{' '}
+                {t.login.noAccount}{' '}
                 <button type="button" onClick={toggleMode} className={styles.switchButton}>
-                  회원가입
+                  {t.login.register}
                 </button>
               </>
             ) : (
               <>
-                이미 계정이 있으신가요?{' '}
+                {t.login.hasAccount}{' '}
                 <button type="button" onClick={toggleMode} className={styles.switchButton}>
-                  로그인
+                  {t.login.title}
                 </button>
               </>
             )}
           </p>
         </div>
 
-        <p className={styles.terms}>
-          가입 시 <a href="#terms">서비스 이용약관</a> 및 <a href="#privacy">개인정보 처리방침</a>에 동의하게 됩니다.
-        </p>
+        <p className={styles.terms}>{t.login.terms}</p>
       </div>
     </div>
   );

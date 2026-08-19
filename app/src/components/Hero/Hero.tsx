@@ -1,3 +1,4 @@
+import { useLanguage } from '../../contexts/LanguageContext';
 import styles from './Hero.module.css';
 
 interface HeroProps {
@@ -7,9 +8,10 @@ interface HeroProps {
 }
 
 export default function Hero({ onScrollToUpload, showVisual, onStartClick }: HeroProps) {
+  const { t } = useLanguage();
+
   const handleClick = () => {
     onStartClick();
-    // 약간의 딜레이 후 스크롤
     setTimeout(() => {
       onScrollToUpload();
     }, 100);
@@ -19,15 +21,11 @@ export default function Hero({ onScrollToUpload, showVisual, onStartClick }: Her
     <section className={styles.hero}>
       <div className={styles.container}>
         <div className={styles.content}>
-          <span className={styles.badge}>배경 지우개 정식 출시 ⚡</span>
-          <h1 className={styles.title}>
-            이미지 배경을 제거해줄게요
-          </h1>
-          <p className={styles.subtitle}>
-            드래그 앤 드롭으로 간편하게, 여러 이미지도 한 번에 처리해요 ✨
-          </p>
+          <span className={styles.badge}>{t.hero.badge}</span>
+          <h1 className={styles.title}>{t.hero.title}</h1>
+          <p className={styles.subtitle}>{t.hero.subtitle}</p>
           <button className={styles.ctaButton} onClick={handleClick}>
-            지금 시작하기
+            {t.hero.cta}
           </button>
         </div>
 
@@ -37,7 +35,7 @@ export default function Hero({ onScrollToUpload, showVisual, onStartClick }: Her
               <div className={styles.toasterPlaceholder}>
                 <span className={styles.placeholderEmoji}>🍞</span>
               </div>
-              <span className={styles.imageLabel}>원본 이미지</span>
+              <span className={styles.imageLabel}>{t.hero.before}</span>
             </div>
             <span className={styles.arrow}>→</span>
             <div className={styles.afterImage}>
@@ -46,7 +44,7 @@ export default function Hero({ onScrollToUpload, showVisual, onStartClick }: Her
                   <span className={styles.placeholderEmoji}>🍞</span>
                 </div>
               </div>
-              <span className={styles.imageLabel}>배경 제거 완료 ✨</span>
+              <span className={styles.imageLabel}>{t.hero.after}</span>
             </div>
           </div>
         </div>

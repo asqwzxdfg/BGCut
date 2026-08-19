@@ -1,6 +1,9 @@
+import { useLanguage } from '../../contexts/LanguageContext';
 import styles from './Footer.module.css';
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -8,9 +11,7 @@ export default function Footer() {
           <span className={styles.logoIcon}>✂️</span>
           <span className={styles.logoText}>BGCut</span>
         </div>
-        <p className={styles.copyright}>
-          © 2026 Sandeul. All rights reserved.
-        </p>
+        <p className={styles.copyright}>{t.footer.copyright}</p>
       </div>
     </footer>
   );

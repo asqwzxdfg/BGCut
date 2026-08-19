@@ -1,0 +1,89 @@
+.container {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.trigger:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-muted);
+}
+
+.globeIcon {
+  flex-shrink: 0;
+}
+
+.currentLang {
+  font-size: 14px;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-border-subtle);
+  padding: var(--space-2);
+  z-index: 200;
+  animation: dropdownIn 0.2s var(--ease-out);
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.option:hover {
+  background: var(--color-bg-muted);
+}
+
+.optionActive {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.optionActive:hover {
+  background: var(--color-primary-light);
+}
+
+.flag {
+  font-size: 18px;
+}
+
+.langName {
+  flex: 1;
+  text-align: left;
+}
+
+.option svg {
+  color: var(--color-primary);
+}

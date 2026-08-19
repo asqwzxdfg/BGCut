@@ -10,12 +10,14 @@ import BackgroundCustomizer from '../../components/BackgroundCustomizer';
 import Footer from '../../components/Footer';
 import { useBackgroundRemoval } from '../../hooks/useBackgroundRemoval';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { downloadSingleFile, downloadAllAsZip } from '../../utils/download';
 import type { ProcessingResult, BackgroundOption } from '../../types';
 import styles from './HomePage.module.css';
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const uploadRef = useRef<HTMLDivElement>(null);
   const [compareResult, setCompareResult] = useState<ProcessingResult | null>(null);
   const [showVisual, setShowVisual] = useState(true);
@@ -50,26 +52,23 @@ export default function HomePage() {
   }, []);
 
   const handleFilesSelected = useCallback((selectedFiles: File[]) => {
-    // 로그인 체크
     if (!user) {
-      if (window.confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
+      if (window.confirm(t.dropzone.loginRequired)) {
         navigate('/login');
       }
       return;
     }
 
-    // 사용량 체크
     if (!canUseService()) {
-      if (window.confirm('오늘 무료 사용량을 모두 소진했습니다. Pro 플랜으로 업그레이드 하시겠습니까?')) {
+      if (window.confirm(t.dropzone.limitReached)) {
         navigate('/pricing');
       }
       return;
     }
 
-    // 사용량 증가 및 파일 처리
     incrementUsage();
     addFiles(selectedFiles);
-  }, [user, canUseService, incrementUsage, addFiles, navigate]);
+  }, [user, canUseService, incrementUsage, addFiles, navigate, t]);
 
   const handleDownload = useCallback((result: ProcessingResult) => {
     downloadSingleFile(result, backgroundOption);
@@ -104,17 +103,20 @@ export default function HomePage() {
 
         <section className={styles.uploadSection} ref={uploadRef}>
           <div className={styles.container}>
-            {/* 사용량 표시 */}
             {user && !isPro && showUpload && (
               <div className={styles.usageInfo}>
-                <span>오늘 남은 횟수: </span>
-                <strong>{remainingUsage === Infinity ? '무제한' : `${remainingUsage}회`}</strong>
+                <span>{t.usage.remaining} </span>
+                <strong>
+                  {remainingUsage === Infinity 
+                    ? t.usage.unlimited 
+                    : `${remainingUsage}${t.usage.times}`}
+                </strong>
                 {remainingUsage === 0 && (
                   <button 
                     className={styles.upgradeLink}
                     onClick={() => navigate('/pricing')}
                   >
-                    Pro로 업그레이드
+                    {t.usage.upgrade}
                   </button>
                 )}
               </div>
@@ -126,7 +128,6 @@ export default function HomePage() {
                 disabled={isProcessing && files.length >= 20}
               />
 
-              {/* Pro 사용자만 배경 커스터마이저 표시 */}
               {isPro && showUpload && (
                 <BackgroundCustomizer
                   option={backgroundOption}

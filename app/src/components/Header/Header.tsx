@@ -1,5 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
+import LanguageSelector from '../LanguageSelector';
 import styles from './Header.module.css';
 
 interface HeaderProps {
@@ -9,6 +11,7 @@ interface HeaderProps {
 export default function Header({ onScrollToTop }: HeaderProps) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
     logout();
@@ -24,18 +27,19 @@ export default function Header({ onScrollToTop }: HeaderProps) {
         </button>
 
         <nav className={styles.nav}>
-          <Link to="/pricing" className={styles.navLink}>요금제</Link>
+          <LanguageSelector />
+          <Link to="/pricing" className={styles.navLink}>{t.header.pricing}</Link>
           {user ? (
             <div className={styles.userMenu}>
               <span className={styles.userName}>{user.name}</span>
               {user.plan === 'pro' && <span className={styles.proBadge}>Pro</span>}
               <button className={styles.logoutButton} onClick={handleLogout}>
-                로그아웃
+                {t.header.logout}
               </button>
             </div>
           ) : (
             <Link to="/login" className={styles.ctaButton}>
-              로그인
+              {t.header.login}
             </Link>
           )}
         </nav>

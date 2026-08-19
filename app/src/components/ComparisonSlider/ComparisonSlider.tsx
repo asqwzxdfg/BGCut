@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import type { ProcessingResult } from '../../types';
 import styles from './ComparisonSlider.module.css';
 
@@ -8,6 +9,7 @@ interface ComparisonSliderProps {
 }
 
 export default function ComparisonSlider({ result, onClose }: ComparisonSliderProps) {
+  const { t } = useLanguage();
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -78,7 +80,7 @@ export default function ComparisonSlider({ result, onClose }: ComparisonSliderPr
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeButton} onClick={onClose} aria-label="닫기">
+        <button className={styles.closeButton} onClick={onClose} aria-label="Close">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
@@ -86,8 +88,8 @@ export default function ComparisonSlider({ result, onClose }: ComparisonSliderPr
         </button>
 
         <div className={styles.header}>
-          <h2 className={styles.title}>정교한 AI 컷아웃 기술을 직접 비교해보세요</h2>
-          <p className={styles.subtitle}>머리카락 한 올 한 올까지 정밀하게 감지하여 깔끔한 누끼 결과물을 약속합니다.</p>
+          <h2 className={styles.title}>{t.comparison.title}</h2>
+          <p className={styles.subtitle}>{t.comparison.subtitle}</p>
         </div>
 
         <div
@@ -96,24 +98,21 @@ export default function ComparisonSlider({ result, onClose }: ComparisonSliderPr
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
-          {/* Original Image (Left) */}
           <div className={styles.originalImage}>
-            <img src={result.originalPreview} alt="원본" />
-            <span className={styles.label}>원본</span>
+            <img src={result.originalPreview} alt={t.comparison.original} />
+            <span className={styles.label}>{t.comparison.original}</span>
           </div>
 
-          {/* Result Image (Right) - Clipped */}
           <div
             className={styles.resultImage}
             style={{ clipPath: `inset(0 0 0 ${sliderPosition}%)` }}
           >
             <div className={styles.checkerboard}>
-              <img src={result.resultUrl} alt="결과" />
+              <img src={result.resultUrl} alt={t.comparison.result} />
             </div>
-            <span className={styles.label}>결과</span>
+            <span className={styles.label}>{t.comparison.result}</span>
           </div>
 
-          {/* Slider Handle */}
           <div
             className={styles.sliderLine}
             style={{ left: `${sliderPosition}%` }}

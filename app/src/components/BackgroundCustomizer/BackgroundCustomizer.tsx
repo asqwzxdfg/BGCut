@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import type { BackgroundOption, BackgroundType } from '../../types';
 import styles from './BackgroundCustomizer.module.css';
 
@@ -15,6 +16,7 @@ const PRESET_COLORS = [
 ];
 
 export default function BackgroundCustomizer({ option, onChange, disabled }: BackgroundCustomizerProps) {
+  const { t } = useLanguage();
   const [isExpanded, setIsExpanded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -63,7 +65,7 @@ export default function BackgroundCustomizer({ option, onChange, disabled }: Bac
       >
         <div className={styles.headerLeft}>
           <span className={styles.proBadge}>Pro</span>
-          <span className={styles.title}>배경 커스텀</span>
+          <span className={styles.title}>{t.background.title}</span>
         </div>
         <svg 
           className={`${styles.chevron} ${isExpanded ? styles.chevronUp : ''}`}
@@ -87,7 +89,7 @@ export default function BackgroundCustomizer({ option, onChange, disabled }: Bac
             <div className={styles.typePreview}>
               <div className={styles.checkerboard} />
             </div>
-            <span>투명</span>
+            <span>{t.background.transparent}</span>
           </button>
 
           <button
@@ -100,7 +102,7 @@ export default function BackgroundCustomizer({ option, onChange, disabled }: Bac
                 style={{ background: option.color || '#FFFFFF' }}
               />
             </div>
-            <span>색상</span>
+            <span>{t.background.color}</span>
           </button>
 
           <button
@@ -109,7 +111,7 @@ export default function BackgroundCustomizer({ option, onChange, disabled }: Bac
           >
             <div className={styles.typePreview}>
               {option.imageUrl ? (
-                <img src={option.imageUrl} alt="배경" className={styles.imagePreview} />
+                <img src={option.imageUrl} alt="Background" className={styles.imagePreview} />
               ) : (
                 <div className={styles.imagePlaceholder}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -120,7 +122,7 @@ export default function BackgroundCustomizer({ option, onChange, disabled }: Bac
                 </div>
               )}
             </div>
-            <span>이미지</span>
+            <span>{t.background.image}</span>
           </button>
         </div>
 
@@ -133,13 +135,13 @@ export default function BackgroundCustomizer({ option, onChange, disabled }: Bac
                   className={`${styles.colorSwatch} ${option.color === color ? styles.colorSwatchActive : ''}`}
                   style={{ background: color }}
                   onClick={() => handleColorChange(color)}
-                  aria-label={`색상 ${color}`}
+                  aria-label={`Color ${color}`}
                 />
               ))}
             </div>
             <div className={styles.customColor}>
               <label htmlFor="customColor" className={styles.customColorLabel}>
-                직접 입력
+                {t.background.customColor}
               </label>
               <input
                 id="customColor"
@@ -174,10 +176,10 @@ export default function BackgroundCustomizer({ option, onChange, disabled }: Bac
                 <polyline points="17 8 12 3 7 8" />
                 <line x1="12" y1="3" x2="12" y2="15" />
               </svg>
-              배경 이미지 선택
+              {t.background.selectImage}
             </button>
             {option.imageUrl && (
-              <p className={styles.imageHint}>이미지가 선택되었습니다</p>
+              <p className={styles.imageHint}>{t.background.imageSelected}</p>
             )}
           </div>
         )}

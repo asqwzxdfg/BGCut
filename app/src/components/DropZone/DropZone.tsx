@@ -1,4 +1,5 @@
 import { useCallback, useState, useRef } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import styles from './DropZone.module.css';
 
 interface DropZoneProps {
@@ -11,6 +12,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_FILES = 20;
 
 export default function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
+  const { t } = useLanguage();
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -20,24 +22,24 @@ export default function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
     const errors: string[] = [];
 
     if (files.length > MAX_FILES) {
-      errors.push(`한 번에 최대 ${MAX_FILES}개의 파일만 업로드할 수 있습니다.`);
+      errors.push(t.errors.tooManyFiles.replace('{max}', String(MAX_FILES)));
       return { valid, errors };
     }
 
     for (const file of files) {
       if (!ACCEPTED_TYPES.includes(file.type)) {
-        errors.push(`지원하지 않는 파일 형식입니다: ${file.name}`);
+        errors.push(t.errors.invalidFileType.replace('{filename}', file.name));
         continue;
       }
       if (file.size > MAX_FILE_SIZE) {
-        errors.push(`파일 크기가 10MB를 초과합니다: ${file.name}`);
+        errors.push(t.errors.fileTooLarge.replace('{filename}', file.name));
         continue;
       }
       valid.push(file);
     }
 
     return { valid, errors };
-  }, []);
+  }, [t]);
 
   const handleFiles = useCallback((files: FileList | File[]) => {
     const fileArray = Array.from(files);
@@ -93,7 +95,6 @@ export default function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
     if (files && files.length > 0) {
       handleFiles(files);
     }
-    // Reset input value to allow selecting the same file again
     e.target.value = '';
   }, [handleFiles]);
 
@@ -115,7 +116,7 @@ export default function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
         onKeyDown={handleKeyDown}
         role="button"
         tabIndex={disabled ? -1 : 0}
-        aria-label="이미지 파일을 드래그하거나 클릭하여 선택하세요"
+        aria-label={t.dropzone.dragText}
       >
         <input
           ref={fileInputRef}
@@ -136,7 +137,7 @@ export default function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
         </div>
 
         <p className={styles.mainText}>
-          {isDragOver ? '여기에 놓으세요' : '이미지를 여기에 드래그하거나'}
+          {isDragOver ? t.dropzone.dropText : t.dropzone.dragText}
         </p>
 
         <button 
@@ -148,11 +149,11 @@ export default function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
           }}
           disabled={disabled}
         >
-          파일 선택
+          {t.dropzone.selectButton}
         </button>
 
         <p className={styles.subText}>
-          PNG, JPG, JPEG, WEBP (최대 10MB)
+          {t.dropzone.fileTypes}
         </p>
       </div>
 
