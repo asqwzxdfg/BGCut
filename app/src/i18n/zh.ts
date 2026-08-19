@@ -11,6 +11,10 @@ export const zh = {
     cta: '立即开始',
     before: '原图',
     after: '背景移除完成 ✨',
+    scrollHint: '滚动查看示例',
+    example1: '人像背景移除',
+    example2: '商品图片抠图',
+    example3: '标志/图标背景移除',
   },
   dropzone: {
     dragText: '将图片拖到这里或',

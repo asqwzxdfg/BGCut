@@ -11,6 +11,10 @@ export const en = {
     cta: 'Get Started',
     before: 'Original Image',
     after: 'Background Removed ✨',
+    scrollHint: 'Scroll to see examples',
+    example1: 'Portrait background removal',
+    example2: 'Product image cutout',
+    example3: 'Logo/icon background removal',
   },
   dropzone: {
     dragText: 'Drag images here or',

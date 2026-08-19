@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import type { ProcessingResult } from '../../types';
 import styles from './ComparisonSlider.module.css';
@@ -13,6 +13,27 @@ export default function ComparisonSlider({ result, onClose }: ComparisonSliderPr
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // 배경 옵션에 따른 스타일 계산
+  const bgOption = result?.backgroundOption || { type: 'transparent' };
+  
+  const backgroundStyle = useMemo(() => {
+    if (bgOption.type === 'color' && bgOption.color) {
+      return { backgroundColor: bgOption.color };
+    }
+    if (bgOption.type === 'image' && bgOption.imageUrl) {
+      const settings = bgOption.imageSettings || { x: 50, y: 50, scale: 1, opacity: 1 };
+      return { 
+        backgroundImage: `url(${bgOption.imageUrl})`,
+        backgroundSize: `${settings.scale * 100}%`,
+        backgroundPosition: `${settings.x}% ${settings.y}%`,
+        opacity: settings.opacity,
+      };
+    }
+    return {};
+  }, [bgOption]);
+
+  const isTransparent = bgOption.type === 'transparent';
 
   const handleMove = useCallback((clientX: number) => {
     if (!containerRef.current) return;
@@ -98,21 +119,27 @@ export default function ComparisonSlider({ result, onClose }: ComparisonSliderPr
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
+          {/* 원본 이미지 (왼쪽) */}
           <div className={styles.originalImage}>
             <img src={result.originalPreview} alt={t.comparison.original} />
             <span className={styles.label}>{t.comparison.original}</span>
           </div>
 
+          {/* 결과 이미지 (오른쪽) - 커스텀 배경 적용 */}
           <div
             className={styles.resultImage}
             style={{ clipPath: `inset(0 0 0 ${sliderPosition}%)` }}
           >
-            <div className={styles.checkerboard}>
+            <div 
+              className={`${styles.resultBackground} ${isTransparent ? styles.checkerboard : ''}`}
+              style={!isTransparent ? backgroundStyle : {}}
+            >
               <img src={result.resultUrl} alt={t.comparison.result} />
             </div>
             <span className={styles.label}>{t.comparison.result}</span>
           </div>
 
+          {/* 슬라이더 핸들 */}
           <div
             className={styles.sliderLine}
             style={{ left: `${sliderPosition}%` }}

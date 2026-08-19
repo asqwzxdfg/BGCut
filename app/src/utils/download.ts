@@ -21,7 +21,7 @@ export async function downloadSingleFile(
 
 export async function downloadAllAsZip(
   results: ProcessingResult[],
-  backgroundOption: BackgroundOption = { type: 'transparent' }
+  _globalBackgroundOption: BackgroundOption = { type: 'transparent' } // 사용하지 않음 - 각 결과별 옵션 사용
 ) {
   const zip = new JSZip();
   const folder = zip.folder('bgcut_results');
@@ -33,7 +33,9 @@ export async function downloadAllAsZip(
 
   for (const result of results) {
     try {
-      const finalBlob = await applyBackground(result.resultBlob, backgroundOption);
+      // 각 결과의 개별 배경 옵션 사용
+      const bgOption = result.backgroundOption || { type: 'transparent' as const };
+      const finalBlob = await applyBackground(result.resultBlob, bgOption);
       const filename = result.originalName.replace(/\.[^/.]+$/, '') + '_bgremoved.png';
       folder.file(filename, finalBlob);
     } catch (error) {

@@ -11,6 +11,10 @@ export const ja = {
     cta: '今すぐ始める',
     before: '元の画像',
     after: '背景削除完了 ✨',
+    scrollHint: 'スクロールして例を見る',
+    example1: '人物写真の背景削除',
+    example2: '商品画像の切り抜き',
+    example3: 'ロゴ/アイコンの背景削除',
   },
   dropzone: {
     dragText: '画像をここにドラッグするか',

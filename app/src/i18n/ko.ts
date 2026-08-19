@@ -13,10 +13,14 @@ export const ko = {
     cta: '지금 시작하기',
     before: '원본 이미지',
     after: '배경 제거 완료 ✨',
+    scrollHint: '스크롤하여 예시 보기',
+    example1: '인물 사진 배경 제거',
+    example2: '상품 이미지 누끼',
+    example3: '로고/아이콘 배경 제거',
   },
   // DropZone
   dropzone: {
-    dragText: '이미지를 여기에 드래그하거나',
+    dragText: '이미지를 여기에 드래그하거나 클릭하세요',
     dropText: '여기에 놓으세요',
     selectButton: '파일 선택',
     fileTypes: 'PNG, JPG, JPEG, WEBP (최대 10MB)',

@@ -12,6 +12,7 @@ export default function Header({ onScrollToTop }: HeaderProps) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { t } = useLanguage();
+  const isKorean = t.background.transparent === '투명';
 
   const handleLogout = () => {
     logout();
@@ -22,12 +23,17 @@ export default function Header({ onScrollToTop }: HeaderProps) {
     <header className={styles.header}>
       <div className={styles.container}>
         <button className={styles.logo} onClick={onScrollToTop} aria-label="홈으로 이동">
-          <span className={styles.logoIcon}>✂️</span>
+          <img src="/icon.png" alt="BGCut" className={styles.logoIcon} />
           <span className={styles.logoText}>BGCut</span>
         </button>
 
         <nav className={styles.nav}>
-          <LanguageSelector />
+          <Link to="/editor" className={styles.navLink}>
+            {isKorean ? '작업' : 'Editor'}
+          </Link>
+          <Link to="/hub" className={styles.navLink}>
+            {isKorean ? '허브' : 'Hub'}
+          </Link>
           <Link to="/pricing" className={styles.navLink}>{t.header.pricing}</Link>
           {user ? (
             <div className={styles.userMenu}>
@@ -36,11 +42,15 @@ export default function Header({ onScrollToTop }: HeaderProps) {
               <button className={styles.logoutButton} onClick={handleLogout}>
                 {t.header.logout}
               </button>
+              <LanguageSelector />
             </div>
           ) : (
-            <Link to="/login" className={styles.ctaButton}>
-              {t.header.login}
-            </Link>
+            <>
+              <Link to="/login" className={styles.ctaButton}>
+                {t.header.login}
+              </Link>
+              <LanguageSelector />
+            </>
           )}
         </nav>
       </div>

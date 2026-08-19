@@ -1,17 +1,16 @@
 .page {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .main {
   flex: 1;
-  overflow: hidden;
+  padding-top: var(--space-8);
 }
 
-.uploadSection {
-  padding: 0 0 var(--space-20);
+.editorSection {
+  padding: var(--space-8) 0 var(--space-20);
 }
 
 .container {
@@ -30,13 +29,19 @@
   border-radius: var(--radius-full);
   font-size: 14px;
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-4);
-  animation: fadeIn 0.3s var(--ease-out);
+  margin-bottom: var(--space-6);
+  animation: fadeIn 0.5s var(--ease-out);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .usageInfo strong {
@@ -59,21 +64,19 @@
 }
 
 .dropZoneWrapper {
-  opacity: 0;
-  transform: translateY(20px);
-  max-height: 0;
-  overflow: hidden;
-  transition: opacity 0.4s var(--ease-out),
-              transform 0.4s var(--ease-out),
-              max-height 0.5s var(--ease-out);
+  animation: slideUp 0.6s var(--ease-out);
+  margin-bottom: var(--space-6);
 }
 
-.dropZoneVisible {
-  opacity: 1;
-  transform: translateY(0);
-  max-height: none;
-  overflow: visible;
-  margin-bottom: var(--space-6);
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
