@@ -1,0 +1,126 @@
+.wrapper {
+  width: 100%;
+}
+
+.dropzone {
+  background: var(--color-bg-dropzone);
+  border: 2px dashed transparent;
+  border-radius: var(--radius-xl);
+  padding: var(--space-12);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-in-out);
+  box-shadow: var(--shadow-sm);
+}
+
+.dropzone:hover {
+  background: var(--color-bg-dropzone-hover);
+}
+
+.dropzone.dragover {
+  background: var(--color-bg-dropzone-hover);
+  border-color: var(--color-primary);
+  transform: scale(1.01);
+  box-shadow: 0 0 0 4px rgba(124, 111, 245, 0.15);
+  animation: softPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes softPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(124, 111, 245, 0.15); }
+  50% { box-shadow: 0 0 0 8px rgba(124, 111, 245, 0); }
+}
+
+.dropzone.error {
+  background: var(--color-error-light);
+  border-color: var(--color-error);
+}
+
+.dropzone.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.input {
+  display: none;
+}
+
+.icon {
+  color: var(--color-primary);
+  margin-bottom: var(--space-4);
+}
+
+.dragover .icon {
+  transform: scale(1.1);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.mainText {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.selectButton {
+  height: 40px;
+  padding: 0 var(--space-6);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-3);
+  transition: all var(--transition-fast);
+}
+
+.selectButton:hover {
+  background: var(--color-primary-hover);
+  box-shadow: 0 4px 16px rgba(124, 111, 245, 0.25);
+  transform: translateY(-1px);
+}
+
+.selectButton:active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
+.selectButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.subText {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.errorMessage {
+  margin-top: var(--space-3);
+  padding: 10px var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-error-light);
+  color: var(--color-text-error);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  animation: fadeInUp 0.25s var(--ease-out);
+}
+
+@media (max-width: 768px) {
+  .dropzone {
+    padding: var(--space-8) var(--space-5);
+  }
+
+  .mainText {
+    font-size: 18px;
+  }
+
+  .selectButton {
+    width: 100%;
+  }
+}
